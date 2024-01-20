@@ -31,7 +31,7 @@ function fetchListProducts() {
     method: "GET",
   })
     .then(function (res) {
-      console.log("first", res);
+      console.log("first", res.data);
       renderListProduct(res.data);
     })
     .catch(function (err) {
@@ -54,7 +54,7 @@ function deleteProduct(id) {
     });
 }
 
-function createProduct() {
+function creatProduct() {
   var tenSP = document.getElementById("TenSP").value;
   var giaSP = document.getElementById("GiaSP").value;
   var hinhSP = document.getElementById("HinhSP").value;
@@ -72,8 +72,7 @@ function createProduct() {
     data: products,
   })
     .then(function (res) {
-      console.log(res.data);
-
+      console.log(res);
       fetchListProducts();
       $("#myModal").modal("hide");
     })
