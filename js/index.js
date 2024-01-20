@@ -6,19 +6,15 @@ function renderListProduct(productArr) {
         <td>${index + 1}</td> 
         <td>${data.name}</td>
         <td>${data.price}</td>
-        <td><img src="${data.img}" width=200 alt=""></td>
+        <td><img src="${data.img}" width=200 alt="hinh bi loi"></td>
         <td>${data.desc}</td>
        <td>
-       <button type="button" onclick=" deleteProduct(${
+       <button type="button" onclick=" deleteProduct('${
          data.id
-       })" class="btn btn-danger">
+       }')" class="btn btn-danger">
         Xóa
         </button>
-        <button type="button" onclick=" editProduct(${
-          data.id
-        })" class="btn btn-success">
-         Edit
-          </button>
+      
        </td>
         </tr>`;
     content += trString;
