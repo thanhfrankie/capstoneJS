@@ -29,7 +29,7 @@ function renderListProduct(productArr) {
 }
 function fetchListProducts() {
   axios({
-    url: "https://65a5f6b474cf4207b4ef0eee.mockapi.io/products",
+    url: "https://65a5f6af74cf4207b4ef0eda.mockapi.io/",
     method: "GET",
   })
     .then(function (res) {
@@ -44,7 +44,7 @@ fetchListProducts();
 
 function deleteProduct(id) {
   axios({
-    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/products/${id}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io//${id}`,
     method: "DELETE",
   })
     .then(function (res) {
@@ -56,7 +56,7 @@ function deleteProduct(id) {
     });
 }
 
-function creatProduct() {
+function createProduct() {
   var tenSP = document.getElementById("TenSP").value;
   var giaSP = document.getElementById("GiaSP").value;
   var hinhSP = document.getElementById("HinhSP").value;
@@ -67,9 +67,8 @@ function creatProduct() {
     img: hinhSP,
     desc: motaSp,
   };
-  console.log("🚀 ~ creatProduct ~ product:", products);
   axios({
-    url: "https://65a5f6b474cf4207b4ef0eee.mockapi.io/products",
+    url: "https://65a5f6af74cf4207b4ef0eda.mockapi.io/",
     method: "POST",
     data: products,
   })
@@ -85,7 +84,7 @@ function creatProduct() {
 function editProduct(id) {
   idEdited = id;
   axios({
-    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/products/${id}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io//${id}`,
     method: "GET",
   })
     .then(function (res) {
@@ -102,7 +101,6 @@ function editProduct(id) {
       console.log(err);
     });
 
-  console.log("🚀 ~ editProduct ~ id:", id);
 }
 function updateProduct(id) {
   var tenSP = document.getElementById("TenSP").value;
@@ -116,7 +114,7 @@ function updateProduct(id) {
     desc: motaSp,
   };
   axios({
-    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/products/${idEdited}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io//${idEdited}`,
     method: "PUT",
     data: products,
   })
