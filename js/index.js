@@ -61,7 +61,6 @@ function deleteProduct(id) {
   })
     .then(function (res) {
       console.log("res", res);
-      // gọi lại api lấy danh sách api khi lấy thành công
       fetchListProduct();
     })
     .catch(function (err) {
@@ -72,7 +71,7 @@ function createProduct() {
   var tenSp = document.getElementById("TenSP").value;
   var giaSp = document.getElementById("GiaSP").value;
   var hinhSp = document.getElementById("HinhSP").value;
-  var moTaSp = document.getElementById("moTaSp").value;
+  var moTaSp = document.getElementById("motaSp").value;
   var product = {
     name: tenSp,
     img: hinhSp,
@@ -97,24 +96,24 @@ function createProduct() {
 function editProduct(id) {
   idEdited = id;
   axios({
-    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${idEdited}`,
     method: "GET",
   })
     .then(function (res) {
       var productEdit = res.data;
-      console.log("🥶 - productEdit:", productEdit);
+      console.log(productEdit)
       document.getElementById("TenSP").value = productEdit.name;
       document.getElementById("HinhSP").value = productEdit.img;
       document.getElementById("GiaSP").value = productEdit.price;
-      document.getElementById("moTaSp").value = productEdit.desc;
+      document.getElementById("motaSp").value = productEdit.desc;
       $("#myModal").modal("show");
-      // $("#TenSP", this).focus();
+      // focus vào input đầu tiên
       $("#myModal").on("shown.bs.modal", function () {
         $("#TenSP").trigger("focus");
       });
-      // focus vào input đầu tiên
+      // $("#TenSP", this).focus();
 
-      document.getElementById("TenSP").focus();
+      // document.getElementById("TenSP").focus();
     })
     .catch(function (err) {
       console.log(err);
@@ -127,7 +126,7 @@ function updateProduct() {
   console.log("🥶 - giaSp:", giaSp);
   var hinhSp = document.getElementById("HinhSP").value;
   console.log("🥶 - hinhSp:", hinhSp);
-  var moTaSp = document.getElementById("moTaSp").value;
+  var moTaSp = document.getElementById("motaSp").value;
   console.log("🥶 - moTaSp:", moTaSp);
   var product = {
     name: tenSp,
