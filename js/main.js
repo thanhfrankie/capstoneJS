@@ -1,5 +1,5 @@
 console.log("hello");
-// var idEdited = null;
+var idEdited = null;
 function renderListProduct(productArr) {
   var content = "";
   var reverseProductArr = productArr.reverse();
@@ -44,7 +44,7 @@ fetchListProducts();
 
 function deleteProduct(id) {
   axios({
-    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/product/${id}`,
+    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/products/${id}`,
     method: "DELETE",
   })
     .then(function (res) {
