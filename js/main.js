@@ -44,7 +44,7 @@ fetchListProducts();
 
 function deleteProduct(id) {
   axios({
-    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/products/${id}`,
+    url: `https://65a5f6b474cf4207b4ef0eee.mockapi.io/product/${id}`,
     method: "DELETE",
   })
     .then(function (res) {

@@ -1,81 +1,94 @@
-console.log("hello");
 var idEdited = null;
-function renderListProduct(productArr) {
-  var content = "";
-  var reverseProductArr = productArr.reverse();
-  reverseProductArr.forEach(function (data, index) {
-    var trString = `<tr>
-        <td>${index + 1}</td> 
-        <td>${data.name}</td>
-        <td>${data.price}</td>
-        <td><img src="${data.img}" width=200 alt="hinh bi loi"></td>
-        <td>${data.desc}</td>
-       <td>
-       <button type="button" onclick=" deleteProduct('${
-         data.id
-       }')" class="btn btn-danger">
-        Xóa
-        </button>
-        <button type="button" onclick=" editProduct('${
-          data.id
-        }')" class="btn btn-warning">
-         edit
-         </button>
-       </td>
-        </tr>`;
-    content += trString;
-    document.getElementById("tblDanhSachSP").innerHTML = content;
-  });
+// bật loading
+function turnOnLoading() {
+  document.getElementById("loading").style.display = "block";
 }
-function fetchListProducts() {
-  axios({
-    url: "https://65a5f6af74cf4207b4ef0eda.mockapi.io/",
-    method: "GET",
-  })
+// ẩn loading
+function turnOffLoading() {
+  document.getElementById("loading").style.display = "none";
+}
+function renderListProduct(productArr) {
+  var contentHTML = "";
+  var reverseProductArr = productArr.reverse();
+  reverseProductArr.forEach(function (item, index) {
+    var trString = `
+        <tr>
+        <td>${index + 1}</td>
+        <td>${item.name}</td>
+        <td>${item.price}</td>
+        <td><img src="${item.img}" style="width: 100px"/></td>
+        <td>${item.desc}</td>
+        <td>
+        <button class="btn btn-danger" onclick='deleteProduct(${
+          item.id
+        })'>Delete</button>
+        <button class="btn btn-warning" onclick='editProduct(${
+          item.id
+        })'>Edit</button>
+        </td>
+        </tr>
+        `;
+    contentHTML += trString;
+  });
+  document.getElementById("tblDanhSachSP").innerHTML = contentHTML;
+}
+function fetchListProduct() {
+  turnOnLoading();
+  axios
+    .get("https://65a5f6af74cf4207b4ef0eda.mockapi.io/product", {
+      headers: {
+        "Cache-Control": "no-cache",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Access-Control-Allow-Origin": "*",
+        "Content-type": "application/x-www-form-urlencoded",
+      },
+    })
     .then(function (res) {
-      console.log("first", res.data);
+      turnOffLoading();
       renderListProduct(res.data);
+      console.log("🥶 - data:", res.data)
     })
     .catch(function (err) {
-      console.log("first", err);
+      turnOffLoading();
     });
 }
-fetchListProducts();
-
+fetchListProduct();
 function deleteProduct(id) {
+  turnOnLoading();
   axios({
-    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io//${id}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`,
     method: "DELETE",
   })
     .then(function (res) {
-      console.log(res.data);
-      fetchListProducts();
+      console.log("res", res);
+      // gọi lại api lấy danh sách api khi lấy thành công
+      fetchListProduct();
     })
     .catch(function (err) {
-      console.log(err);
+      turnOffLoading();
     });
 }
-
 function createProduct() {
-  var tenSP = document.getElementById("TenSP").value;
-  var giaSP = document.getElementById("GiaSP").value;
-  var hinhSP = document.getElementById("HinhSP").value;
-  var motaSp = document.getElementById("motaSp").value;
-  var products = {
-    name: tenSP,
-    price: giaSP,
-    img: hinhSP,
-    desc: motaSp,
+  var tenSp = document.getElementById("TenSP").value;
+  var giaSp = document.getElementById("GiaSP").value;
+  var hinhSp = document.getElementById("HinhSP").value;
+  var moTaSp = document.getElementById("moTaSp").value;
+  var product = {
+    name: tenSp,
+    img: hinhSp,
+    price: giaSp,
+    desc: moTaSp,
   };
+  console.log("🥶 - product:", product);
   axios({
-    url: "https://65a5f6af74cf4207b4ef0eda.mockapi.io/",
+    url: "https://65a5f6af74cf4207b4ef0eda.mockapi.io/product",
     method: "POST",
-    data: products,
+    data: product,
   })
     .then(function (res) {
       console.log(res);
-      fetchListProducts();
       $("#myModal").modal("hide");
+      fetchListProduct();
     })
     .catch(function (err) {
       console.log(err);
@@ -84,43 +97,53 @@ function createProduct() {
 function editProduct(id) {
   idEdited = id;
   axios({
-    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io//${id}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`,
     method: "GET",
   })
     .then(function (res) {
-      console.log(res);
-
       var productEdit = res.data;
+      console.log("🥶 - productEdit:", productEdit);
       document.getElementById("TenSP").value = productEdit.name;
-      document.getElementById("GiaSP").value = productEdit.price;
       document.getElementById("HinhSP").value = productEdit.img;
-      document.getElementById("motaSp").value = productEdit.desc;
+      document.getElementById("GiaSP").value = productEdit.price;
+      document.getElementById("moTaSp").value = productEdit.desc;
       $("#myModal").modal("show");
+      // $("#TenSP", this).focus();
+      $("#myModal").on("shown.bs.modal", function () {
+        $("#TenSP").trigger("focus");
+      });
+      // focus vào input đầu tiên
+
+      document.getElementById("TenSP").focus();
     })
     .catch(function (err) {
       console.log(err);
     });
-
 }
-function updateProduct(id) {
-  var tenSP = document.getElementById("TenSP").value;
-  var giaSP = document.getElementById("GiaSP").value;
-  var hinhSP = document.getElementById("HinhSP").value;
-  var motaSp = document.getElementById("motaSp").value;
-  var products = {
-    name: tenSP,
-    price: giaSP,
-    img: hinhSP,
-    desc: motaSp,
+function updateProduct() {
+  var tenSp = document.getElementById("TenSP").value;
+  console.log("🥶 - tenSp:", tenSp);
+  var giaSp = document.getElementById("GiaSP").value;
+  console.log("🥶 - giaSp:", giaSp);
+  var hinhSp = document.getElementById("HinhSP").value;
+  console.log("🥶 - hinhSp:", hinhSp);
+  var moTaSp = document.getElementById("moTaSp").value;
+  console.log("🥶 - moTaSp:", moTaSp);
+  var product = {
+    name: tenSp,
+    img: hinhSp,
+    price: giaSp,
+    desc: moTaSp,
   };
+  console.log("🥶 - product:", product);
   axios({
-    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io//${idEdited}`,
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${idEdited}`,
     method: "PUT",
-    data: products,
+    data: product,
   })
     .then(function (res) {
-      console.log(res);
-      fetchListProducts();
+      fetchListProduct();
+      console.log(res)
       $("#myModal").modal("hide");
     })
     .catch(function (err) {
