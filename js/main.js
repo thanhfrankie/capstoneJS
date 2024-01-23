@@ -1,5 +1,5 @@
 console.log("hello");
-var idEdited = null;
+// var idEdited = null;
 function renderListProduct(productArr) {
   var content = "";
   var reverseProductArr = productArr.reverse();
