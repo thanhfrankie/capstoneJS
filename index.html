@@ -68,13 +68,23 @@
       <header class="display-4 my-4">Quản lý trang bán hàng </header>
       <!-- Phan tab menu -->
       <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
+        <li class="nav-item active">
           <a
-            class="nav-link active"
+            class="nav-link"
             href="#DanhSachSP"
             role="tab"
             data-toggle="tab"
             >Danh sách sản phẩm</a
+          >
+        </li>
+        <li class="nav-item ">
+          <a
+            class="nav-link"
+            href="#DanhSachGioHang"
+            role="tab"
+            data-toggle="tab"
+            onclick="fetchListProduct()"
+            >Giỏ hàng</a
           >
         </li>
       </ul>
@@ -129,6 +139,26 @@
                 <th>Action</th>
               </thead>
               <tbody id="tblDanhSachSP"></tbody>
+            </table>
+            <!-- END TABLE SẢN PHẨM -->
+          </div>
+          <br />
+        </div>
+        <div role="tabpanel" class="tab-pane in active" id="DanhSachGioHang" >
+          
+          <div class="clear-fix"></div>
+          <div class="tblSanPham" id="tblSanPham">
+            <!-- BEGIN TABLE SẢN PHẨM -->
+            <table class="table table-bordered">
+              <thead>
+                <th>STT</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Giá</th>
+                <th>Hình Ảnh</th>
+                <th>Mô Tả</th>
+                <th>Action</th>
+              </thead>
+              <tbody id="tblDanhSachGioHang"></tbody>
             </table>
             <!-- END TABLE SẢN PHẨM -->
           </div>

@@ -25,12 +25,16 @@ function renderListProduct(productArr) {
         <button class="btn btn-warning" onclick='editProduct(${
           item.id
         })'>Edit</button>
+        <button class="btn btn-primary" onclick='addToCart(${
+          item.id
+        })'>Add to Cart</button>
         </td>
         </tr>
         `;
     contentHTML += trString;
   });
   document.getElementById("tblDanhSachSP").innerHTML = contentHTML;
+  // document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
 }
 function fetchListProduct() {
   turnOnLoading();
@@ -148,4 +152,7 @@ function updateProduct() {
     .catch(function (err) {
       console.log(err);
     });
+}
+function addToCart() {
+  console.log("ok")
 }
