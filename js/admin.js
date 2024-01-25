@@ -129,3 +129,22 @@ function updateProduct(id) {
       console.log(err);
     });
 }
+function searchProduct(id) {
+  var searchInput = document.getElementById("searchInput").value.trim().toLowerCase();
+  axios({
+    url: "https://65a5f6b474cf4207b4ef0eee.mockapi.io/products",
+    method: "GET",
+  })
+    .then(function (res) {
+      console.log(res);
+      var foundProducts = res.data.filter(function (product) {
+        return product.name.toLowerCase().includes(searchInput);
+      });
+
+      // Hiển thị kết quả
+      renderListProduct(foundProducts);
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+}

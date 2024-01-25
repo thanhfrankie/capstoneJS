@@ -88,20 +88,9 @@
             </div>
             <div class="col-md-4">
               <!-- BEGIN TÌM KIẾM -->
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Nhập từ khóa"
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-                <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2"
-                    ><i class="fa fa-search"></i
-                  ></span>
-                </div>
-              </div>
+              <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm">
+              <button class="btn btn-success" onclick="searchProduct()">Tìm kiếm</button>
+              <div id="result"></div>
               <!-- END TÌM KIẾM -->
             </div>
           </div>
