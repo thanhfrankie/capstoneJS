@@ -1,3 +1,4 @@
+var cart= []
 var idEdited = null;
 // bật loading
 function turnOnLoading() {
