@@ -1,42 +1,53 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Quản lý sản phẩm</title>
+    <title>Trang User</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+      #loading {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        background-color: #000;
+        z-index: 1;
+      }
+    </style>
   </head>
 
 </html>
 
   <body>
+    <div id="loading"></div>
     <div class="container">
       <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-     
+       
         <div class="collapse navbar-collapse" id="collapsibleNavId">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            
+          
             <li class="nav-item">
-              <a class="nav-link" href="./user.html" >Trang User</a>
+              <a class="nav-link" href="./user.html">Trang User</a>
             </li>
-           
+          
           </ul>
         </div>
       </nav>
 
-      <header class="display-4 my-4">Quản lý trang bán hàng </header>
+      <header class="display-4 my-4">Giỏ hàng</header>
       <!-- Phan tab menu -->
       <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item">
+        <li class="nav-item ">
           <a
-            class="nav-link active"
-            href="#DanhSachSP"
+            class="nav-link"
+            href="#DanhSachGioHang"
             role="tab"
             data-toggle="tab"
-            >Danh sách sản phẩm</a
+            >Giỏ hàng</a
           >
         </li>
       </ul>
@@ -44,29 +55,24 @@
       <!-- Tab panes -->
       <div class="tab-content">
         <!--Danh sách sản phẩm -->
-        <div role="tabpanel" class="tab-pane in active" id="DanhSachSP">
-          <div class="row">
-            <div class="col-md-8">
-              <!-- BEGIN BUTTOM THÊM MỚI -->
-              <button
-                id="btnThemSP"
-                class="btn btn-success"
-                data-toggle="modal"
-                data-target="#myModal"
-              >
-                <i class="fa fa-plus mr-1"></i>
-                Thêm Mới
-              </button>
-              <!-- END BUTTON THÊM MỚI -->
-            </div>
-            <div class="col-md-4">
-              <!-- BEGIN TÌM KIẾM -->
-              <input type="text" id="searchInput" placeholder="Nhập tên sản phẩm">
-              <button class="btn btn-success" onclick="searchProduct()">Tìm kiếm</button>
-              <div id="result"></div>
-              <!-- END TÌM KIẾM -->
-            </div>
-          </div>
+   
+        <div role="tabpanel" class="tab-pane in active" id="DanhSachGioHang" >
+            <div class="row">
+                <div class="col-md-4">
+                  <!-- BEGIN TÌM KIẾM -->
+                  <div class="input-group mb-3">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Nhập từ khóa"
+                      id="search"
+                      onchange="search()"
+                    />
+                    <button class="btn btn-primary" onclick="search()">Tìm kiếm</button>
+                  </div>
+                  <!-- END TÌM KIẾM -->
+                </div>
+              </div>
           <div class="clear-fix"></div>
           <div class="tblSanPham" id="tblSanPham">
             <!-- BEGIN TABLE SẢN PHẨM -->
@@ -74,12 +80,11 @@
               <thead>
                 <th>STT</th>
                 <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
                 <th>Giá</th>
-                <th>Hình Ảnh</th>
-                <th>Mô Tả</th>
                 <th>Action</th>
               </thead>
-              <tbody id="tblDanhSachSP"></tbody>
+              <tbody id="tblDanhSachGioHang"></tbody>
             </table>
             <!-- END TABLE SẢN PHẨM -->
           </div>
@@ -91,7 +96,9 @@
       <!--KetThuc Tabmenu-->
 
       <!-- The Modal -->
-      <div class="modal fade" id="myModal">
+    
+      <!-- The Cart Modal -->
+      <div class="modal fade" id="myModalGioHang">
         <div class="modal-dialog">
           <div class="modal-content">
             <!-- Modal Header -->
@@ -106,7 +113,7 @@
               <div class="form-group">
                 <label>Tên Sản Phẩm</label>
                 <input
-                  id="TenSP"
+                  id="TenSPGioHang"
                   class="form-control"
                   placeholder="Nhập vào tên sản phẩm"
                 />
@@ -114,15 +121,15 @@
               <div class="form-group">
                 <label>Giá</label>
                 <input
-                  id="GiaSP"
+                  id="GiaSPGioHang"
                   class="form-control"
                   placeholder="Nhập vào giá"
                 />
               </div>
               <div class="form-group">
-                <label>Hình Ảnh</label>
+                <label>Số lượng</label>
                 <input
-                  id="HinhSP"
+                  id="soLuongGioHang"
                   class="form-control"
                   placeholder="Nhập vào hình sản phẩm"
                 />
@@ -145,11 +152,11 @@
             </div>
             <!-- Modal footer -->
             <div class="modal-footer">
-              <button onclick=" creatProduct()" class="btn btn-success">
-                Add product
+              <button onclick="createProduct()" class="btn btn-success">
+                Thêm sản phẩm
               </button>
-              <button onclick=" updateProduct()" class="btn btn-warning">
-                Cập nhật Product
+              <button onclick="updateProduct()" class="btn btn-warning">
+                Cập nhật sản phẩm
               </button>
             </div>
           </div>
@@ -181,6 +188,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-   <script src="./js/admin.js"></script>
+    <script src="./js/cart.js"></script>
+    <script src="./js/user.js"></script>
   </body>
 </html>
