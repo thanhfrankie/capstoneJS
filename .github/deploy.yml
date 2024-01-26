@@ -1,0 +1,33 @@
+name: Capstone JS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build  # Replace with your project's build command
+
+    - name: Deploy to server
+      run: |
+        # Perform deployment steps, e.g., copy files, SSH into the server, etc.
+        ssh user@your-server 'cd /path/to/deploy && git pull origin main'
+
+    - name: Clean up
+      run: npm prune

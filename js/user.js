@@ -1,4 +1,62 @@
 var idEdited = null;
+var cart = [];
+console.log(cart)
+function CartItem(cartName, quantity,cartPrice,
+  cartCalPrice ) {
+  this.cartName = cartName
+    this.quantity = quantity
+    this.cartPrice = cartPrice
+    this.cartCalPrice = function () {
+      var finalPrice = this.quantity * this.cartPrice
+      return finalPrice
+    }
+}
+function layDuLieuLocal() {
+  var cartList = JSON.parse(localStorage.getItem("cart"))
+  console.log("🥶 - cartList:", cartList)
+  for (var i = 0; i < cartList.length; i++) {
+    var data = cartList[i]
+    var item = new CartItem(
+      data.cartName,
+      data.quantity,
+      data.cartPrice, 
+      data.cartCalPrice
+    )
+    cart.push(item)
+  }
+  return cart
+}
+
+function renderCart(cartArr) {
+  var contentHTML = "";
+  cartArr.reverse().forEach(function (item, index) {
+    var trString = `
+        <tr>
+        <td>${index + 1}</td>
+        <td>${item.cartName}</td>
+        <td>
+        <button>-</button>
+        ${item.quantity}
+        <button>+</button>
+        </td>
+        <td>${item.price}</td>
+       
+        <td>
+        <button class="btn btn-danger" onclick='deleteProduct(${
+          item.id
+        })'>Delete</button>
+        <button class="btn btn-warning" onclick='editProduct(${
+          item.id
+        })'>Edit</button>
+        </td>
+        </tr>
+        `;
+    contentHTML += trString;
+  });
+  document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
+  // document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
+}
+renderCart(cart)
 // bật loading
 function turnOnLoading() {
   document.getElementById("loading").style.display = "block";
@@ -50,7 +108,7 @@ function fetchListProduct() {
     .then(function (res) {
       turnOffLoading();
       renderListProduct(res.data);
-      console.log("🥶 - data:", res.data)
+      console.log("🥶 - data:", res.data);
     })
     .catch(function (err) {
       turnOffLoading();
@@ -105,7 +163,7 @@ function editProduct(id) {
   })
     .then(function (res) {
       var productEdit = res.data;
-      console.log(productEdit)
+      console.log(productEdit);
       document.getElementById("TenSP").value = productEdit.name;
       document.getElementById("HinhSP").value = productEdit.img;
       document.getElementById("GiaSP").value = productEdit.price;
@@ -146,13 +204,38 @@ function updateProduct() {
   })
     .then(function (res) {
       fetchListProduct();
-      console.log(res)
+      console.log(res);
       $("#myModal").modal("hide");
     })
     .catch(function (err) {
       console.log(err);
     });
 }
-function addToCart() {
-  console.log("ok")
+function addToCart(id) {
+  console.log("ok");
+  axios({
+    url: `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`,
+    method: "GET",
+  })
+    .then( (res) => {
+      console.log(res);
+      var detailItem = res.data
+      var cartItem = {
+        cartName: detailItem.name,
+        quantity: 1,
+        cartPrice: detailItem.price,
+        cartCalPrice: function () {
+          var finalPrice = this.quantity * this.cartPrice
+          return finalPrice
+        }
+      }
+      console.log("🥶 - cartItem:", cartItem)
+      cart.push(cartItem)
+      console.log("🥶 - cart:", cart)
+      localStorage.setItem("cart",  JSON.stringify(cart))
+    })
+    .catch( (err) => {
+      console.log(err);
+    });
+  
 }
