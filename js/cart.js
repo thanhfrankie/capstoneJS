@@ -1,5 +1,7 @@
 var cart = [];
 console.log(cart);
+
+
 function CartItem(
   id,
   cartName,
@@ -43,9 +45,10 @@ function layDuLieuLocal() {
     );
     cart.push(item);
   }
-  return cart;
+  console.log(cart);
+  // return cart;
 }
-layDuLieuLocal();
+layDuLieuLocal(); //hieern thi danh sach gior hang
 function renderCart(cartArr) {
   var contentHTML = "";
   cartArr.reverse().forEach(function (item, index) {
@@ -73,18 +76,30 @@ function renderCart(cartArr) {
   document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
   // document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
 }
-renderCart(cart); 
+renderCart(cart);
 
 function deleteCartProduct(id) {
   var index;
-  for (var i = 0; i < cart.length; i++) {
-    if (cart[i].id == id) {
+  console.log(id);
+  // layDuLieuLocal()
+  var cartList = JSON.parse(localStorage.getItem("cart"));
+  console.log(cart);
+  // var cartList = JSON.parse(localStorage.getItem("cart"));
+  for (var i = 0; i < cartList.length; i++) {
+    console.log(i);
+    if (cartList[i].id == id) {
+      console.log(i);
       index = i;
+      console.log("🥶 - index:", index);
     }
   }
-  console.log("🥶 - index:", index)
-  cart.splice(index, 1);
-  renderCart(cart);
+  console.log("🥶 - index:", index);
+  cartList.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cartList))
+  //lay tu local => duyet => tao object CartItem
+  // mang CartItem => truyen vao render
+  //json & Class
+  renderCart(cartList);
 }
 function timKiem() {
   console.log("first");
