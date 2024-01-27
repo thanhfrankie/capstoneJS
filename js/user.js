@@ -163,6 +163,7 @@ function addToCart(id) {
       console.log(res);
       var detailItem = res.data;
       var cartItem = {
+        id: detailItem.id,
         cartName: detailItem.name,
         quantity: 1,
         cartPrice: detailItem.price,
