@@ -1,120 +1,120 @@
-var cart = [];
-console.log(cart);
+// carts.js
 
-function CartItem(
-  id,
-  cartName,
-  quantity,
-  botSoLuong,
-  themSoLuong,
-  cartPrice,
-  cartCalPrice
-) {
-  this.id = id;
-  this.cartName = cartName;
-  this.quantity = quantity;
-  this.cartPrice = cartPrice;
-  this.botSoLuong = function () {
-    quantity = quantity - 1;
-    return quantity;
-  };
-  this.themSoLuong = function () {
-    quantity = quantity + 1;
-    return quantity;
-  };
-  this.cartCalPrice = function () {
-    var finalPrice = quantity * cartPrice;
-    return finalPrice;
-  };
+var cart = [];
+
+function turnOnLoading() {
+  document.getElementById("loading").style.display = "block";
 }
-function layDuLieuLocal() {
-  var dataJson = localStorage.getItem("cart");
-  var cartList = JSON.parse(dataJson) || [];
-  for (var i = 0; i < cartList.length; i++) {
-    var data = cartList[i];
-    var item = new CartItem(
-      data.id,
-      data.cartName,
-      data.quantity,
-      "",
-      "",
-      data.cartPrice,
-      data.cartCalPrice
-    );
-    cart.push(item);
-  }
-  console.log(cart);
+
+function turnOffLoading() {
+  document.getElementById("loading").style.display = "none";
 }
-layDuLieuLocal(); //hieern thi danh sach gior hang
-function renderCart(cartArr) {
+
+function renderCart() {
   var contentHTML = "";
-  cartArr.reverse().forEach(function (item, index) {
-    console.log(item, "item");
+  var totalPayment = 0;
+
+  cart.forEach(function (item, index) {
+    var totalPrice = item.quantity * item.cartPrice;
+    totalPayment += totalPrice;
+
     var trString = `
-          <tr>
+        <tr>
           <td>${index + 1}</td>
           <td>${item.cartName}</td>
           <td>
-          <button onclick='botSoLuong(${item.id})'>-</button>
-          ${item.quantity}
-          <button onclick='themSoLuong(${item.id})'>+</button>
+            <button class="btn btn-warning" onclick="decreaseQuantity(${index})">-</button>
+            ${item.quantity}
+            <button class="btn btn-primary" onclick="increaseQuantity(${index})">+</button>
           </td>
-          <td>${item.price}</td>
-          <td>${item.cartCalPrice()}</td>
+          <td>${item.cartPrice}</td>
+          <td>${totalPrice}</td>
           <td>
-          <button class="btn btn-danger" onclick='removeFromCart(${
-            item.id
-          })'>Delete</button>
+            <button class="btn btn-danger" onclick="removeFromCart(${index})">Remove</button>
+            <button class="btn btn-success" onclick="checkout()">Thanh toán</button>
           </td>
-          </tr>
-          `;
+        </tr>
+    `;
     contentHTML += trString;
   });
-  document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
-}
-renderCart(cart);
 
-function deleteCartProduct(id) {
-  var index;
-  console.log(id);
-  // layDuLieuLocal()
-  var cartList = JSON.parse(localStorage.getItem("cart"));
-  console.log(cart);
-  // var cartList = JSON.parse(localStorage.getItem("cart"));
-  for (var i = 0; i < cartList.length; i++) {
-    console.log(i);
-    if (cartList[i].id == id) {
-      console.log(i);
-      index = i;
-      console.log("🥶 - index:", index);
-    }
+  document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
+  document.getElementById("totalPrice").innerText = totalPayment;
+}
+
+function updateCartCount() {
+  var cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+  document.getElementById("cartCount").innerText = cartCount;
+}
+
+function addToCart(id) {
+  axios
+    .get(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`)
+    .then(function (res) {
+      var detailItem = res.data;
+      var cartItem = {
+        id: detailItem.id,
+        cartName: detailItem.name,
+        quantity: 1,
+        cartPrice: detailItem.price,
+      };
+
+      var existingItemIndex = cart.findIndex(
+        (item) => item.id === cartItem.id
+      );
+
+      if (existingItemIndex !== -1) {
+        cart[existingItemIndex].quantity += 1;
+      } else {
+        cart.push(cartItem);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+}
+
+function decreaseQuantity(index) {
+  if (cart[index].quantity > 1) {
+    cart[index].quantity -= 1;
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart();
   }
-  console.log("🥶 - index:", index);
-  cartList.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cartList));
-  //lay tu local => duyet => tao object CartItem
-  // mang CartItem => truyen vao render
-  //json & Class
-  renderCart(cartList);
 }
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
-    saveCartToLocalStorage();
-    rendercart();
+
+function increaseQuantity(index) {
+  cart[index].quantity += 1;
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
 }
-function timKiem() {
-  console.log("first");
-  var filterData = [];
-  var cartList = JSON.parse(localStorage.getItem("cart"));
-  console.log("🥶 - cartList:", cartList)
-  var searchInput = document
-    .getElementById("search")
-    .value.trim()
-    .toLowerCase();
-    console.log("🥶 - cart:", cart)
-  filterData = cartList.filter((item) => {
-    return item.id.toLowerCase().includes(searchInput);
-  });
-  console.log(filterData);
-  renderCart(filterData);
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  renderCart();
 }
+
+function checkout() {
+  // Giả sử bạn có một hệ thống thanh toán ở đây, chẳng hạn một API
+  // Ở đây, chúng ta chỉ giả lập việc thanh toán bằng cách xóa giỏ hàng và thông báo thành công
+  cart = [];
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartCount();
+  renderCart();
+  alert("Thanh toán thành công!");
+}
+
+// Load giỏ hàng từ LocalStorage khi trang được tải
+window.onload = function () {
+  var storedCart = localStorage.getItem("cart");
+  if (storedCart) {
+    cart = JSON.parse(storedCart);
+    renderCart();
+    updateCartCount();
+  }
+};

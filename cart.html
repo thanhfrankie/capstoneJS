@@ -1,12 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Trang User</title>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
     <style>
       #loading {
         position: fixed;
@@ -19,21 +27,15 @@
       }
     </style>
   </head>
-
-</html>
-
   <body>
     <div id="loading"></div>
     <div class="container">
       <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-       
         <div class="collapse navbar-collapse" id="collapsibleNavId">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          
             <li class="nav-item">
               <a class="nav-link" href="./index.html">Trang User</a>
             </li>
-          
           </ul>
         </div>
       </nav>
@@ -41,7 +43,7 @@
       <header class="display-4 my-4">Giỏ hàng</header>
       <!-- Phan tab menu -->
       <ul class="nav nav-tabs" role="tablist">
-        <li class="nav-item ">
+        <li class="nav-item">
           <a
             class="nav-link"
             href="#DanhSachGioHang"
@@ -55,24 +57,25 @@
       <!-- Tab panes -->
       <div class="tab-content">
         <!--Danh sách sản phẩm -->
-   
-        <div role="tabpanel" class="tab-pane in active" id="DanhSachGioHang" >
-            <div class="row">
-                <div class="col-md-4">
-                  <!-- BEGIN TÌM KIẾM -->
-                  <div class="input-group mb-3">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Nhập từ khóa"
-                      id="search"
-                      onchange="timKiem()"
-                    />
-                    <button class="btn btn-primary" onclick="timKiem()">Tìm kiếm</button>
-                  </div>
-                  <!-- END TÌM KIẾM -->
-                </div>
+        <div role="tabpanel" class="tab-pane in active" id="DanhSachGioHang">
+          <div class="row">
+            <div class="col-md-4">
+              <!-- BEGIN TÌM KIẾM -->
+              <div class="input-group mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Nhập từ khóa"
+                  id="search"
+                  onchange="timKiem()"
+                />
+                <button class="btn btn-primary" onclick="timKiem()">
+                  Tìm kiếm
+                </button>
               </div>
+              <!-- END TÌM KIẾM -->
+            </div>
+          </div>
           <div class="clear-fix"></div>
           <div class="tblSanPham" id="tblSanPham">
             <!-- BEGIN TABLE SẢN PHẨM -->
@@ -82,7 +85,7 @@
                 <th>Tên Sản Phẩm</th>
                 <th>Số Lượng</th>
                 <th>Giá 1 sản phẩm</th>
-                <th>Tổng giá phải trả</th>
+                <th>Tổng giá phải trả: <span id="totalPrice">0</span></th>
                 <th>Action</th>
               </thead>
               <tbody id="tblDanhSachGioHang"></tbody>
@@ -119,8 +122,8 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
+    <!-- <script src="./js/cart.js"></script> -->
     <script src="./js/cart.js"></script>
-    <!-- <script src="./js/carts.js"></script> -->
     <script src="./js/index.js"></script>
   </body>
 </html>
