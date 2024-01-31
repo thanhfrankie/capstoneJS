@@ -67,9 +67,9 @@
                   class="form-control"
                   placeholder="Nhập từ khóa"
                   id="search"
-                  onchange="timKiem()"
+                  onchange="search()"
                 />
-                <button class="btn btn-primary" onclick="timKiem()">
+                <button class="btn btn-primary" onclick="search()">
                   Tìm kiếm
                 </button>
               </div>
@@ -85,7 +85,7 @@
                 <th>Tên Sản Phẩm</th>
                 <th>Số Lượng</th>
                 <th>Giá 1 sản phẩm</th>
-                <th>Tổng giá phải trả: <span id="totalPrice">0</span></th>
+                <th>Tổng giá phải trả</th>
                 <th>Action</th>
               </thead>
               <tbody id="tblDanhSachGioHang"></tbody>
@@ -122,7 +122,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <!-- <script src="./js/cart.js"></script> -->
     <script src="./js/cart.js"></script>
     <script src="./js/index.js"></script>
   </body>

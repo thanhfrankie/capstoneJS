@@ -1,5 +1,3 @@
-// carts.js
-
 var cart = [];
 
 function turnOnLoading() {
@@ -31,15 +29,14 @@ function renderCart() {
           <td>${totalPrice}</td>
           <td>
             <button class="btn btn-danger" onclick="removeFromCart(${index})">Remove</button>
-            <button class="btn btn-success" onclick="checkout()">Thanh toán</button>
+            <button class="btn btn-success" onclick="checkoutSingleItem(${index})">Thanh toán</button>
           </td>
         </tr>
     `;
     contentHTML += trString;
   });
-
   document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
-  document.getElementById("totalPrice").innerText = totalPayment;
+  document.getElementById("totalPrice").innerHTML = totalPayment;
 }
 
 function updateCartCount() {
@@ -47,36 +44,36 @@ function updateCartCount() {
   document.getElementById("cartCount").innerText = cartCount;
 }
 
-function addToCart(id) {
-  axios
-    .get(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`)
-    .then(function (res) {
-      var detailItem = res.data;
-      var cartItem = {
-        id: detailItem.id,
-        cartName: detailItem.name,
-        quantity: 1,
-        cartPrice: detailItem.price,
-      };
+// function addToCart(id) {
+//   axios
+//     .get(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`)
+//     .then(function (res) {
+//       var detailItem = res.data;
+//       var cartItem = {
+//         id: detailItem.id,
+//         cartName: detailItem.name,
+//         quantity: 1,
+//         cartPrice: detailItem.price,
+//       };
 
-      var existingItemIndex = cart.findIndex(
-        (item) => item.id === cartItem.id
-      );
+//       var existingItemIndex = cart.findIndex(
+//         (item) => item.id === cartItem.id
+//       );
 
-      if (existingItemIndex !== -1) {
-        cart[existingItemIndex].quantity += 1;
-      } else {
-        cart.push(cartItem);
-      }
+//       if (existingItemIndex !== -1) {
+//         cart[existingItemIndex].quantity += 1;
+//       } else {
+//         cart.push(cartItem);
+//       }
 
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCartCount();
-      renderCart();
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
-}
+//       localStorage.setItem("cart", JSON.stringify(cart));
+//       updateCartCount();
+//       renderCart();
+//     })
+//     .catch(function (err) {
+//       console.log(err);
+//     });
+// }
 
 function decreaseQuantity(index) {
   if (cart[index].quantity > 1) {
@@ -96,18 +93,32 @@ function removeFromCart(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCartCount();
-  renderCart();
+
 }
 
-function checkout() {
-  // Giả sử bạn có một hệ thống thanh toán ở đây, chẳng hạn một API
-  // Ở đây, chúng ta chỉ giả lập việc thanh toán bằng cách xóa giỏ hàng và thông báo thành công
-  cart = [];
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartCount();
-  renderCart();
-  alert("Thanh toán thành công!");
+function checkoutSingleItem(index) {
+  var item = cart[index];
+  var totalPrice = item.quantity * item.cartPrice;
+  alert(`Thanh toán thành công cho ${item.cartName} với tổng giá ${totalPrice}`);
+  removeFromCart(index);
+  location.reload()
 }
+
+// function checkout() {
+//   var totalPayment = cart.reduce((total, item) => total + item.quantity * item.cartPrice, 0);
+  
+//   if (totalPayment === 0) {
+//     alert("Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi thanh toán.");
+//     return;
+//   }
+
+
+//   cart = [];
+//   localStorage.setItem("cart", JSON.stringify(cart));
+//   updateCartCount();
+//   renderCart();
+//   alert(`Thanh toán thành công cho toàn bộ giỏ hàng với tổng giá ${totalPayment}`);
+// }
 
 // Load giỏ hàng từ LocalStorage khi trang được tải
 window.onload = function () {
@@ -118,3 +129,13 @@ window.onload = function () {
     updateCartCount();
   }
 };
+function search() {
+  var searchInput = document.getElementById("search").value.trim().toLowerCase();
+  var cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+  var filteredItems = cartItems.filter(function (item) {
+    return item.cartName.toLowerCase().includes(searchInput);
+  });
+
+  renderCart(filteredItems);
+}
