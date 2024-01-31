@@ -1,7 +1,6 @@
 var cart = [];
 console.log(cart);
 
-
 function CartItem(
   id,
   cartName,
@@ -15,23 +14,22 @@ function CartItem(
   this.cartName = cartName;
   this.quantity = quantity;
   this.cartPrice = cartPrice;
-
   this.botSoLuong = function () {
-    this.quantity = this.quantity - 1;
-    return this.quantity;
+    quantity = quantity - 1;
+    return quantity;
   };
   this.themSoLuong = function () {
-    this.quantity = this.quantity + 1;
-    return this.quantity;
+    quantity = quantity + 1;
+    return quantity;
   };
   this.cartCalPrice = function () {
-    var finalPrice = this.quantity * this.cartPrice;
+    var finalPrice = quantity * cartPrice;
     return finalPrice;
   };
 }
 function layDuLieuLocal() {
-  var cartList = JSON.parse(localStorage.getItem("cart"));
-  console.log("🥶 - cartList:", cartList);
+  var dataJson = localStorage.getItem("cart");
+  var cartList = JSON.parse(dataJson) || [];
   for (var i = 0; i < cartList.length; i++) {
     var data = cartList[i];
     var item = new CartItem(
@@ -46,7 +44,6 @@ function layDuLieuLocal() {
     cart.push(item);
   }
   console.log(cart);
-  // return cart;
 }
 layDuLieuLocal(); //hieern thi danh sach gior hang
 function renderCart(cartArr) {
@@ -65,7 +62,7 @@ function renderCart(cartArr) {
           <td>${item.price}</td>
           <td>${item.cartCalPrice()}</td>
           <td>
-          <button class="btn btn-danger" onclick='deleteCartProduct(${
+          <button class="btn btn-danger" onclick='removeFromCart(${
             item.id
           })'>Delete</button>
           </td>
@@ -74,7 +71,6 @@ function renderCart(cartArr) {
     contentHTML += trString;
   });
   document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
-  // document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
 }
 renderCart(cart);
 
@@ -95,20 +91,28 @@ function deleteCartProduct(id) {
   }
   console.log("🥶 - index:", index);
   cartList.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cartList))
+  localStorage.setItem("cart", JSON.stringify(cartList));
   //lay tu local => duyet => tao object CartItem
   // mang CartItem => truyen vao render
   //json & Class
   renderCart(cartList);
 }
+function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    saveCartToLocalStorage();
+    rendercart();
+}
 function timKiem() {
   console.log("first");
   var filterData = [];
+  var cartList = JSON.parse(localStorage.getItem("cart"));
+  console.log("🥶 - cartList:", cartList)
   var searchInput = document
     .getElementById("search")
     .value.trim()
     .toLowerCase();
-  filterData = cart.filter((item) => {
+    console.log("🥶 - cart:", cart)
+  filterData = cartList.filter((item) => {
     return item.id.toLowerCase().includes(searchInput);
   });
   console.log(filterData);

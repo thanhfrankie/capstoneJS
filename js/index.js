@@ -1,4 +1,4 @@
-var cart= []
+var cart = [];
 var idEdited = null;
 // bật loading
 function turnOnLoading() {
@@ -163,6 +163,7 @@ function addToCart(id) {
       console.log(res);
       var detailItem = res.data;
       var cartItem = {
+        id: detailItem.id,
         cartName: detailItem.name,
         quantity: 1,
         cartPrice: detailItem.price,
@@ -172,7 +173,13 @@ function addToCart(id) {
         },
       };
       console.log("🥶 - cartItem:", cartItem);
-      cart.push(cartItem);
+      var existingItem = cart.find(item => item.id === cartItem.id)
+      if (existingItem) {
+        existingItem.quantity+=1
+      } else {
+
+        cart.push(cartItem);
+      }
       console.log("🥶 - cart:", cart);
       localStorage.setItem("cart", JSON.stringify(cart));
     })
