@@ -20,9 +20,15 @@ function renderListProduct(productArr) {
         <td><img src="${item.img}" style="width: 100px"/></td>
         <td>${item.desc}</td>
         <td>
-          <button class="btn btn-danger" onclick='deleteProduct(${item.id})'>Delete</button>
-          <button class="btn btn-warning" onclick='editProduct(${item.id})'>Edit</button>
-          <button class="btn btn-primary" onclick='addToCart(${item.id})'>Add to Cart</button>
+          <button class="btn btn-danger" onclick='deleteProduct(${
+            item.id
+          })'>Delete</button>
+          <button class="btn btn-warning" onclick='editProduct(${
+            item.id
+          })'>Edit</button>
+          <button class="btn btn-primary" onclick='addToCart(${
+            item.id
+          })'>Add to Cart</button>
         </td>
       </tr>
     `;
@@ -34,7 +40,9 @@ function renderListProduct(productArr) {
 async function fetchListProduct() {
   turnOnLoading();
   try {
-    const res = await axios.get("https://65a5f6af74cf4207b4ef0eda.mockapi.io/product");
+    const res = await axios.get(
+      "https://65a5f6af74cf4207b4ef0eda.mockapi.io/product"
+    );
     turnOffLoading();
     renderListProduct(res.data);
     console.log("🥶 - data:", res.data);
@@ -47,7 +55,9 @@ async function fetchListProduct() {
 async function deleteProduct(id) {
   turnOnLoading();
   try {
-    await axios.delete(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`);
+    await axios.delete(
+      `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`
+    );
     fetchListProduct();
   } catch (err) {
     turnOffLoading();
@@ -73,7 +83,8 @@ function createProduct() {
     desc: moTaSp,
   };
 
-  axios.post("https://65a5f6af74cf4207b4ef0eda.mockapi.io/product", product)
+  axios
+    .post("https://65a5f6af74cf4207b4ef0eda.mockapi.io/product", product)
     .then((res) => {
       console.log(res);
       $("#myModal").modal("hide");
@@ -87,7 +98,9 @@ function createProduct() {
 async function editProduct(id) {
   idEdited = id;
   try {
-    const res = await axios.get(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${idEdited}`);
+    const res = await axios.get(
+      `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${idEdited}`
+    );
     var productEdit = res.data;
     console.log(productEdit);
 
@@ -101,7 +114,6 @@ async function editProduct(id) {
     $("#myModal").on("shown.bs.modal", function () {
       $("#TenSP").trigger("focus");
     });
-
   } catch (err) {
     console.log(err);
   }
@@ -126,7 +138,10 @@ async function updateProduct() {
   };
 
   try {
-    await axios.put(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${idEdited}`, product);
+    await axios.put(
+      `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${idEdited}`,
+      product
+    );
     fetchListProduct();
     $("#myModal").modal("hide");
   } catch (err) {
@@ -136,7 +151,9 @@ async function updateProduct() {
 
 async function addToCart(id) {
   try {
-    const res = await axios.get(`https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`);
+    const res = await axios.get(
+      `https://65a5f6af74cf4207b4ef0eda.mockapi.io/product/${id}`
+    );
     var detailItem = res.data;
     var cartItem = {
       id: detailItem.id,
@@ -148,7 +165,7 @@ async function addToCart(id) {
       },
     };
 
-    var existingItem = cart.find(item => item.id === cartItem.id);
+    var existingItem = cart.find((item) => item.id === cartItem.id);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
@@ -162,16 +179,20 @@ async function addToCart(id) {
 }
 
 function search() {
-  axios.get("https://65a5f6af74cf4207b4ef0eda.mockapi.io/product")
+  axios
+    .get("https://65a5f6af74cf4207b4ef0eda.mockapi.io/product")
     .then((res) => {
-      var searchInput = document.getElementById("search").value.trim().toLowerCase();
-      var filterProducts = res.data.filter((item) => item.name.toLowerCase().includes(searchInput));
+      var searchInput = document
+        .getElementById("search")
+        .value.trim()
+        .toLowerCase();
+      var filterProducts = res.data.filter((item) =>
+        item.name.toLowerCase().includes(searchInput)
+      );
       renderListProduct(filterProducts);
     })
     .catch((err) => {
       console.log(err);
     });
 }
-
-// Gọi hàm fetchListProduct() khi trang được load
 document.addEventListener("DOMContentLoaded", fetchListProduct);
