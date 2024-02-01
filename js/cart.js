@@ -55,17 +55,17 @@ function increaseQuantity(index) {
 function removeFromCart(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
-  location.reload(true);
+  renderCart(cart);
 }
 
 function checkoutSingleItem(index) {
   var item = cart[index];
   var totalPrice = item.quantity * item.cartPrice;
   alert(
-    `Bạn đã thanh toán thành công cho ${item.cartName} với tổng giá ${totalPrice}`
+    `Bạn đã thanh toán thành công cho sản phẩm ${item.cartName} với tổng đơn hàng là ${totalPrice}`
   );
   removeFromCart(index);
-  location.reload(true);
+  renderCart(cart);
 }
 
 window.onload = function () {

@@ -171,7 +171,6 @@ async function addToCart(id) {
     } else {
       cart.push(cartItem);
     }
-
     localStorage.setItem("cart", JSON.stringify(cart));
   } catch (err) {
     console.log(err);
@@ -195,4 +194,5 @@ function search() {
       console.log(err);
     });
 }
+
 document.addEventListener("DOMContentLoaded", fetchListProduct);
