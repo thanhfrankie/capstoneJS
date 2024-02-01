@@ -36,13 +36,7 @@ function renderCart(items) {
     contentHTML += trString;
   });
   document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
-
 }
-
-// function updateCartCount() {
-//   var cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-//   document.getElementById("cartCount").innerHTML = cartCount;
-// }
 
 function decreaseQuantity(index) {
   if (cart[index].quantity > 1) {
@@ -61,16 +55,17 @@ function increaseQuantity(index) {
 function removeFromCart(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
-  // updateCartCount();
+  location.reload(true);
 }
 
 function checkoutSingleItem(index) {
   var item = cart[index];
   var totalPrice = item.quantity * item.cartPrice;
   alert(
-    `Thanh toán thành công cho ${item.cartName} với tổng giá ${totalPrice}`
+    `Bạn đã thanh toán thành công cho ${item.cartName} với tổng giá ${totalPrice}`
   );
   removeFromCart(index);
+  location.reload(true);
 }
 
 window.onload = function () {
@@ -78,7 +73,6 @@ window.onload = function () {
   if (storedCart) {
     cart = JSON.parse(storedCart);
     renderCart(cart);
-    // updateCartCount();
   }
 };
 function searchCart() {
@@ -91,6 +85,6 @@ function searchCart() {
   var filteredItems = cartItems.filter(function (item) {
     return item.cartName.toLowerCase().includes(searchInput);
   });
-  console.log("first")
+  console.log("first");
   renderCart(filteredItems);
 }
