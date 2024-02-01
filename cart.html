@@ -24,11 +24,17 @@
         left: 0;
         background-color: #000;
         z-index: 1;
+        color: green;
+        font-size: 30px;
+        text-align: center;
       }
     </style>
   </head>
   <body>
-    <div id="loading"></div>
+    <div id="loading">
+      sau khi bấm nút xóa hoặc thanh toán, a f5 lại để cập nhật lại danh sách
+      giúp em với
+    </div>
     <div class="container">
       <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
         <div class="collapse navbar-collapse" id="collapsibleNavId">
@@ -67,9 +73,9 @@
                   class="form-control"
                   placeholder="Nhập từ khóa"
                   id="search"
-                  onchange="search()"
+                  onchange="searchCart()"
                 />
-                <button class="btn btn-primary" onclick="search()">
+                <button class="btn btn-primary" onclick="searchCart()">
                   Tìm kiếm
                 </button>
               </div>

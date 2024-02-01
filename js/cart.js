@@ -8,13 +8,13 @@ function turnOffLoading() {
   document.getElementById("loading").style.display = "none";
 }
 
-function renderCart() {
+function renderCart(items) {
   var contentHTML = "";
-  var totalPayment = 0;
+  // var totalPayment = 0;
 
-  cart.forEach(function (item, index) {
+  items.forEach(function (item, index) {
     var totalPrice = item.quantity * item.cartPrice;
-    totalPayment += totalPrice;
+    // totalPayment += totalPrice;
 
     var trString = `
         <tr>
@@ -26,7 +26,7 @@ function renderCart() {
             <button class="btn btn-primary" onclick="increaseQuantity(${index})">+</button>
           </td>
           <td>${item.cartPrice}</td>
-          <td>${totalPrice}</td>
+          <td> ${totalPrice}</td>
           <td>
             <button class="btn btn-danger" onclick="removeFromCart(${index})">Remove</button>
             <button class="btn btn-success" onclick="checkoutSingleItem(${index})">Thanh toán</button>
@@ -36,32 +36,32 @@ function renderCart() {
     contentHTML += trString;
   });
   document.getElementById("tblDanhSachGioHang").innerHTML = contentHTML;
-  document.getElementById("totalPrice").innerHTML = totalPayment;
+
 }
 
-function updateCartCount() {
-  var cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-  document.getElementById("cartCount").innerHTML = cartCount;
-}
+// function updateCartCount() {
+//   var cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+//   document.getElementById("cartCount").innerHTML = cartCount;
+// }
 
 function decreaseQuantity(index) {
   if (cart[index].quantity > 1) {
     cart[index].quantity -= 1;
     localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
+    renderCart(cart);
   }
 }
 
 function increaseQuantity(index) {
   cart[index].quantity += 1;
   localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+  renderCart(cart);
 }
 
 function removeFromCart(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
-  updateCartCount();
+  // updateCartCount();
 }
 
 function checkoutSingleItem(index) {
@@ -77,11 +77,11 @@ window.onload = function () {
   var storedCart = localStorage.getItem("cart");
   if (storedCart) {
     cart = JSON.parse(storedCart);
-    renderCart();
-    updateCartCount();
+    renderCart(cart);
+    // updateCartCount();
   }
 };
-function search() {
+function searchCart() {
   var searchInput = document
     .getElementById("search")
     .value.trim()
@@ -91,6 +91,6 @@ function search() {
   var filteredItems = cartItems.filter(function (item) {
     return item.cartName.toLowerCase().includes(searchInput);
   });
-
+  console.log("first")
   renderCart(filteredItems);
 }
